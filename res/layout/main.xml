@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout
+   <!--   <RelativeLayout
         android:id="@+id/titleRelativeLayout"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
@@ -29,13 +29,12 @@
             android:background="#6CA6CD"
             android:gravity="center"
             android:text="@string/main_settingBtn"/>
-    </RelativeLayout>
+    </RelativeLayout>-->
     
     <EditText
         android:id="@+id/editText"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/titleRelativeLayout"
         android:layout_above="@+id/bottomLinearLayout"
         android:background="#EBEBEB"
         android:gravity="top"
@@ -57,7 +56,7 @@
             android:layout_weight="20"
             android:background="#6CA6CD"
             android:text="@string/main_clear"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textNumber"
@@ -74,7 +73,7 @@
             android:layout_weight="20"
             android:background="#6CA6CD"
             android:text="@string/main_ok"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
         

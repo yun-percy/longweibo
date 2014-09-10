@@ -11,7 +11,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -30,7 +29,6 @@ import android.text.TextWatcher;
 import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -38,34 +36,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-/**
- * 发布长微博主界面
- * @author wenhan
- * @官方微博   http://weibo.com/happytutor
- */
-
 public class MainActivity extends Activity {
-
 	private Button btnOk;
 	private Button btnClear;
 	private EditText editText;
-	private Button settingButton;
-	
 	private int fontsize;
 	private Typeface fontstyle;
-	private int[] fontcolor;
-	private int[] backgroundcolor;
-	Context mcontext = null;
-	//时间戳
 	public static String year;
 	public static String month;
 	public static String day;
 	public static String hour;
 	public static String minute;
 	public static String second;
-	
 	private TextView textNumber;
+	Context mcontext = null;
 	public static String sText = "";	//获取写入的字符
 	public static String SETTING_NAME = "easychangweiboSettings";
 	public static boolean isfirstStart = true;
@@ -75,60 +59,38 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
-        
         //获取屏幕分辨率
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		int widthpixels = dm.widthPixels;
-        
-        refreshSettings();	//刷新设置的值
-        //EditText
         editText = (EditText) this.findViewById(R.id.editText);
         editText.setText(sText);
         textNumber = (TextView) this.findViewById(R.id.textNumber);
         textNumber.setText(""+sText.length());
         //实时监控显示字符
         editText.addTextChangedListener(mTextWatcher);
-		
         editText.setTextSize(widthpixels/30);		//设置显示字体大小
         editText.setTypeface(fontstyle);
-        editText.setTextColor(Color.rgb(fontcolor[0],fontcolor[1],fontcolor[2]));
-        editText.setBackgroundResource(R.drawable.note_bg);//Drawable(R.drawable.note_bg);//tBackgroundColor(R.drawable.note_bg);
-     //   editText.setBackgroundColor(Color.rgb(backgroundcolor[0],backgroundcolor[1],backgroundcolor[2]));
-        
-        //设置按钮
-		settingButton = (Button)this.findViewById(R.id.btnabout);
-		settingButton.setOnClickListener(new Button.OnClickListener(){
-        	@SuppressLint("ParserError")
-			@Override
-        	public void onClick(View v){
-        		//显示设置的信息
-        		Intent intent = new Intent();
-        		intent.setClass(MainActivity.this, settingActivity.class);
-        		startActivity(intent);
-        		MainActivity.this.finish();
-        	}
-        });
-        
+        editText.setTextColor(Color.rgb(83,83,83));
+        editText.setBackgroundResource(R.drawable.note_bg);
         //清除按钮
         btnClear = (Button) this.findViewById(R.id.btnClear);
         btnClear.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
-				
 				//清除EditText的内容
 				editText.setText("");
 			}
 		});
-       
         //确定按钮
         btnOk = (Button) this.findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if(editText.getText().toString().trim().equals("")){
-					Toast.makeText(getBaseContext(), getResources().getString(R.string.MainActivity_isnullToast), Toast.LENGTH_SHORT).show();
+					Toast.makeText(getBaseContext(), 
+							getResources().getString(R.string.MainActivity_isnullToast),
+							Toast.LENGTH_SHORT).show();
 					return;
 				}
 				final String[] arraylist = new String[]{
@@ -138,7 +100,8 @@ public class MainActivity extends Activity {
 						getResources().getString(R.string.MainActivity_AlertDialog_cancle)
 						};
 				Dialog dialog = new AlertDialog.Builder(MainActivity.this).
-						setTitle(getResources().getString(R.string.MainActivity_AlertDialog_functionSelect)).
+						setTitle(getResources().getString(R.string.
+								MainActivity_AlertDialog_functionSelect)).
 						setItems(arraylist, new DialogInterface.OnClickListener() {
 							@SuppressLint("ShowToast")
 							@Override
@@ -151,8 +114,10 @@ public class MainActivity extends Activity {
 								//读出EditText的内容
 								String s = editText.getText().toString();
 								//获取签名信息
-								String autographText = getResources().getString(R.string.MainActivity_AlertDialog_autographText);
-								String autographUrl = getResources().getString(R.string.MainActivity_AlertDialog_autographUrl);
+								String autographText = getResources().
+										getString(R.string.MainActivity_AlertDialog_autographText);
+								String autographUrl = getResources().
+										getString(R.string.MainActivity_AlertDialog_autographUrl);
 								//工具签名
 								s = s + "\n";
 							    s = s + "--------------------\n";
@@ -170,38 +135,37 @@ public class MainActivity extends Activity {
 								minute = "" + t.minute;
 								second = "" + t.second;
 								//功能选择
-								Bitmap bitmap = Bitmap.createBitmap(d_width, 65*(textactivity.getHeight() + 1), Config.ARGB_8888);
+								Bitmap bitmap = Bitmap.createBitmap
+										(d_width, 65*(textactivity.getHeight() + 1), 
+												Config.ARGB_8888);
 								//创建画布
 								Canvas canvas = new Canvas(bitmap);
 								//设置画布背景颜色
 								mcontext=MainActivity.this;
 								Resources res=mcontext.getResources();
-								BitmapDrawable bmpDraw=(BitmapDrawable)res.getDrawable(R.drawable.note_bg2);
+								BitmapDrawable bmpDraw=(BitmapDrawable)res.
+										getDrawable(R.drawable.note_bg2);
 								Bitmap bmp=bmpDraw.getBitmap();
-							//	bmp=Bitmap.createBitmap(d_width, 35*(textactivity.getHeight() + 1), null);//(d_width, 35*(textactivity.getHeight() + 1), Config.ARGB_8888);
-								//创建画布
 								//设置画布背景颜色
-								 Rect src = new Rect();// 图片
-							        Rect dst = new Rect();// 屏幕位置及尺寸
-							        // 下面的 dst 是表示 绘画这个图片的位置
-							        dst.left = 0;    //miDTX,//这个是可以改变的，也就是绘图的起点X位置
-							        dst.top = 0;    //mBitQQ.getHeight();//这个是QQ图片的高度。 也就相当于 桌面图片绘画起点的Y坐标
-							        dst.right =d_width;    //miDTX + mBitDestTop.getWidth();// 表示需绘画的图片的右上角
-							        dst.bottom = 65*(textactivity.getHeight() + 1);    // mBitQQ.getHeight() + mBitDestTop.getHeight();//表示需绘画的图片的右下角
-								//
-								canvas.drawBitmap(bmp,null, dst, null);//ARGB(255,135,135,135);
-								src = null;
+							    Rect dst = new Rect();// 屏幕位置及尺寸
+							    // 下面的 dst 是表示 绘画这个图片的位置
+							    dst.left = 0;    //这个是可以改变的，也就是绘图的起点X位置
+							    dst.top = 0;    //这个是图片的高度。 也就相当于 桌面图片绘画起点的Y坐标
+							    dst.right =d_width;    // 表示需绘画的图片的右上角
+							    dst.bottom = 65*(textactivity.getHeight() + 1);
+							    //表示需绘画的图片的右下角
+								canvas.drawBitmap(bmp,null, dst, null);
 						        dst = null;
-								//创建画笔
-								Paint paint = new Paint();
+								Paint paint = new Paint();//创建画笔
 								//通过画笔设置字体的大小、格式、颜色
 								paint.setTextSize(40);										
 								paint.setTypeface(fontstyle);
-								paint.setARGB(255, fontcolor[0], fontcolor[1], fontcolor[2]);										
+								paint.setARGB(255, 83, 83, 83);		
 								y = y + 10;		
 //								x = x+50;
 								//将处理后的内容画到画布上
-//								System.out.println("dasjdasjkdhjkasdhjkasdh"+ x+"-------"+y+"+++++++");
+//								System.out.println("dasjdasjkdhjkasdhjkasdh"
+								//+ x+"-------"+y+"+++++++");
 								String []ss = textactivity.getContext();
 								for(int i = 0; i < textactivity.getHeight(); i++){
 									canvas.drawText(ss[i], x, y, paint);
@@ -212,7 +176,8 @@ public class MainActivity extends Activity {
 								File sd = Environment.getExternalStorageDirectory();
 								String fpath = sd.getPath() + "/EasyChangWeibo";
 								//设置保存路径
-								String path = sd.getPath() + "/EasyChangWeibo/" + year + month + day + hour + minute + second + ".png";
+								String path = sd.getPath() + "/EasyChangWeibo/" + year + 
+										month + day + hour + minute + second + ".png";
 								File file = new File(fpath);
 								if(!file.exists()){
 									file.mkdir();
@@ -224,9 +189,9 @@ public class MainActivity extends Activity {
 										bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
 										os.flush();
 										os.close();
-										Toast.makeText(getBaseContext(), "长微博成功保存到 "+ path, Toast.LENGTH_LONG).show();
+										Toast.makeText(getBaseContext(), "长微博成功保存到 "+ 
+										path, Toast.LENGTH_LONG).show();
 									} catch (Exception e) {
-										// TODO: handle exception
 									}
 									break;
 								case 1:
@@ -237,7 +202,6 @@ public class MainActivity extends Activity {
 										os.flush();
 										os.close();
 									} catch (Exception e) {
-										// TODO: handle exception
 									}
 									//转到图片显示picViewActivity
 									Intent intent = new Intent();
@@ -253,26 +217,22 @@ public class MainActivity extends Activity {
 										os.close();
 										Intent shareIntent = new Intent(Intent.ACTION_SEND);
 						                File file2 = new File(path);
-						                shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file2));
+						                shareIntent.putExtra(Intent.EXTRA_STREAM, 
+						                		Uri.fromFile(file2));
 						                shareIntent.setType("image/*");
 						                startActivity(Intent.createChooser(shareIntent, "发布"));
 									} catch (Exception e) {
-										// TODO: handle exception
 									}
-									
 								default:
-									break;
+								break;
 								}
 							}
 						}).create();
 				dialog.show();
 			}
 		});
-        
-        
         //按钮点击效果
         TouchShow mTouchShow = new TouchShow();
-        settingButton.setOnTouchListener(mTouchShow);
         btnClear.setOnTouchListener(mTouchShow);
         btnOk.setOnTouchListener(mTouchShow);
     }
@@ -283,45 +243,6 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-    
-    //调用onOptionItemSelected()方法实现菜单项的选择
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	switch (item.getItemId()) {
-		case R.id.menu_about:
-			
-			startActivity(new Intent(this, aboutActivity.class));
-			
-
-			return true;
-			//更多的设置选项在此实现
-			//..............
-		case R.id.menu_setting:
-			
-			Intent intent = new Intent();
-    		intent.setClass(MainActivity.this, settingActivity.class);
-    		startActivity(intent);
-    		MainActivity.this.finish();
-
-			return true;
-			
-		case R.id.menu_helpinfo:
-			startActivity(new Intent(this, helpActivity.class));
-
-			return true;
-			
-		case R.id.menu_updateinfo:
-			startActivity(new Intent(this, updateInfoActivity.class));
-
-			return true;
-		}
-    	return false;
-    }
-    
-    /**
-     * 设置语言为中文简体
-     * @author Anders Jing
-     * */
     public void setChineseSimple(){
     	Toast.makeText(getBaseContext(), "设置成中文简体", Toast.LENGTH_LONG).show();
 		Resources resources = getResources();//获得res资源对象
@@ -345,54 +266,21 @@ public class MainActivity extends Activity {
         private CharSequence temp;
         @Override  
         public void onTextChanged(CharSequence s, int start, int before, int count) {  
-            // TODO Auto-generated method stub  
              temp = s;
         }
         
         @Override  
         public void beforeTextChanged(CharSequence s, int start, int count,  
                 int after) {  
-            // TODO Auto-generated method stub 
         }
 
 		@Override
 		public void afterTextChanged(Editable s) {
-			// TODO Auto-generated method stub
 			textNumber.setText(""+temp.length());
 			sText = editText.getText().toString();	//动态获取写入的字符
 		}  
     };
 	
-	/**
-     * 获取/保存设置的值
-     * @author Anders Jing
-     * */
-	public void refreshSettings(){
-		SharedPreferences settings = getSharedPreferences(SETTING_NAME, MODE_PRIVATE);
-		
-		if(isfirstStart){	//如果第一次启动，获取上次设置的值
-			settingActivity.mfontsize = settings.getInt("mfontsize", 60);		//获取设置的字体大小
-	        settingActivity.mfontstyle = settings.getInt("mfontstyle", 0);		//获取设置的字体格式
-	        settingActivity.mfontcolor = settings.getInt("mfontcolor", 19);		//获取设置的字体颜色
-	        settingActivity.mbackgroundcolor = settings.getInt("mbackgroundcolor", 20);//获取设置的背景颜色
-        	
-	        isfirstStart = false;
-        }
-		//设置
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putInt("mfontsize", settingActivity.mfontsize);
-        editor.putInt("mfontstyle", settingActivity.mfontstyle);
-        editor.putInt("mfontcolor", settingActivity.mfontcolor);
-        editor.putInt("mbackgroundcolor", settingActivity.mbackgroundcolor);        
-        editor.commit();
-        
-        //赋值
-        fontsize = settingActivity.getfontsize();
-		fontstyle = settingActivity.getfontstyle();
-		fontcolor = settingActivity.getfontcolor();
-		backgroundcolor = settingActivity.getbackgroudcolor();
-		
-    }
     
     /**
      * 返回当前年份
