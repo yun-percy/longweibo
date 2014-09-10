@@ -53,6 +53,8 @@ public class MainActivity extends Activity {
 	public static String sText = "";	//获取写入的字符
 	public static String SETTING_NAME = "easychangweiboSettings";
 	public static boolean isfirstStart = true;
+	private TextUtil mTextUtil;  
+	private Paint mPaint;  
     @SuppressLint({ "ParserError", "ParserError", "ParserError" })
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,7 @@ public class MainActivity extends Activity {
         editText.addTextChangedListener(mTextWatcher);
         editText.setTextSize(widthpixels/30);		//设置显示字体大小
         editText.setTypeface(fontstyle);
-        editText.setTextColor(Color.rgb(83,83,83));
+        editText.setTextColor(Color.rgb(53,53,53));
         editText.setBackgroundResource(R.drawable.note_bg);
         //清除按钮
         btnClear = (Button) this.findViewById(R.id.btnClear);
@@ -107,7 +109,7 @@ public class MainActivity extends Activity {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								int d_width = 1000;    //适应新浪微博解析分辨率
-								int WORDNUM = (1000/(40))-1;  //转化成图片时  每行显示的字数
+								int WORDNUM = (1000/(43))-1;  //转化成图片时  每行显示的字数
 								//设置文字在图片中的显示间距
 								int x = 10;
 								float y = (float) (fontsize*0.8);
@@ -120,9 +122,6 @@ public class MainActivity extends Activity {
 										getString(R.string.MainActivity_AlertDialog_autographUrl);
 								//工具签名
 								s = s + "\n";
-							    s = s + "--------------------\n";
-							    s = s + autographText;
-							    s = s + "\n" + autographUrl;
 								//处理EditText内容
 								textActivity textactivity = new textActivity(WORDNUM, s);
 								//获取当前系统时间
@@ -136,7 +135,7 @@ public class MainActivity extends Activity {
 								second = "" + t.second;
 								//功能选择
 								Bitmap bitmap = Bitmap.createBitmap
-										(d_width, 65*(textactivity.getHeight() + 1), 
+										(d_width, 85*(textactivity.getHeight() + 1), 
 												Config.ARGB_8888);
 								//创建画布
 								Canvas canvas = new Canvas(bitmap);
@@ -144,7 +143,7 @@ public class MainActivity extends Activity {
 								mcontext=MainActivity.this;
 								Resources res=mcontext.getResources();
 								BitmapDrawable bmpDraw=(BitmapDrawable)res.
-										getDrawable(R.drawable.note_bg2);
+										getDrawable(R.drawable.note_bg22);
 								Bitmap bmp=bmpDraw.getBitmap();
 								//设置画布背景颜色
 							    Rect dst = new Rect();// 屏幕位置及尺寸
@@ -152,25 +151,32 @@ public class MainActivity extends Activity {
 							    dst.left = 0;    //这个是可以改变的，也就是绘图的起点X位置
 							    dst.top = 0;    //这个是图片的高度。 也就相当于 桌面图片绘画起点的Y坐标
 							    dst.right =d_width;    // 表示需绘画的图片的右上角
-							    dst.bottom = 65*(textactivity.getHeight() + 1);
+							    dst.bottom = 85*(textactivity.getHeight() + 1);
 							    //表示需绘画的图片的右下角
 								canvas.drawBitmap(bmp,null, dst, null);
 						        dst = null;
-								Paint paint = new Paint();//创建画笔
-								//通过画笔设置字体的大小、格式、颜色
-								paint.setTextSize(40);										
-								paint.setTypeface(fontstyle);
-								paint.setARGB(255, 83, 83, 83);		
-								y = y + 10;		
-//								x = x+50;
-								//将处理后的内容画到画布上
-//								System.out.println("dasjdasjkdhjkasdhjkasdh"
-								//+ x+"-------"+y+"+++++++");
-								String []ss = textactivity.getContext();
-								for(int i = 0; i < textactivity.getHeight(); i++){
-									canvas.drawText(ss[i], x, y, paint);
-									y = y + 65;
-								}	
+						        //==================字体换行
+						        mPaint = new Paint();  
+						        Typeface wenquan=Typeface.createFromAsset(getAssets(), "fonts/SourceHanSansCN-Normal.otf");
+						        mTextUtil = new TextUtil(s, 75, 140, d_width-125,85*(textactivity.getHeight() + 1),  
+						                255, 40,wenquan);  
+						        mTextUtil.InitText();
+						        mTextUtil.DrawText(canvas);
+//								Paint paint = new Paint();//创建画笔
+//								//通过画笔设置字体的大小、格式、颜色
+//								paint.setTextSize(40);										
+//								paint.setTypeface(fontstyle);
+//								paint.setARGB(255, 96, 89,76);		
+//								y = y + 10;		
+//								//将处理后的内容画到画布上
+////								System.out.println("dasjdasjkdhjkasdhjkasdh"
+//								//+ x+"-------"+y+"+++++++");
+//								String []ss = textactivity.getContext();
+//								canvas.translate(40,110);
+//								for(int i = 0; i < textactivity.getHeight(); i++){
+//									canvas.drawText(ss[i], x, y, paint);
+//									y = y + 65;
+//								}	
 								canvas.save(Canvas.ALL_SAVE_FLAG);
 								canvas.restore();
 								File sd = Environment.getExternalStorageDirectory();
@@ -252,12 +258,7 @@ public class MainActivity extends Activity {
 		resources.updateConfiguration(config, dm);
 	}
     
-    
-    /**
-     * 响应返回键
-     * @author Anders Jing
-     * */
-    
+
     /**
      * 实时监控输入多少字符
      * @author Anders Jing
