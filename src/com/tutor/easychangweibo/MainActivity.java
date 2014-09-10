@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
         editText.setTextSize(widthpixels/30);		//设置显示字体大小
         editText.setTypeface(fontstyle);
         editText.setTextColor(Color.rgb(53,53,53));
-        editText.setBackgroundResource(R.drawable.note_bg);
+        editText.setBackgroundResource(R.drawable.main_bg);
         //清除按钮
         btnClear = (Button) this.findViewById(R.id.btnClear);
         btnClear.setOnClickListener(new OnClickListener() {
