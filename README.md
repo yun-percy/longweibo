@@ -25,3 +25,11 @@
 6. 去掉设置代码
 7. 去掉无用java代码
 8. 精简显示代码
+9. 重定义字体
+10. 新的字体采用思源字体
+11. 背景框选取
+12. 自边距，行距的选取
+
+####生成长微博视图
+
+![长微博](https://raw.githubusercontent.com/yun-percy/longweibo/master/preview.png "关于iphone6发布的长微博")
